@@ -79,7 +79,7 @@ def main():
     parser.add_argument('--model_class', '-m', type=str, default='StandardClassifier')
     parser.add_argument('--load_from', type=str, default=None)
 
-    parser.add_argument('--optimizer', type=str, default='adam', choices=['adam', 'sgd'])
+    parser.add_argument('--optimizer', type=str, default='adam', choices=['adam', 'sgd', 'adadelta'])
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate')
     parser.add_argument('--momentum', type=float, default=0.0, help='momentum')

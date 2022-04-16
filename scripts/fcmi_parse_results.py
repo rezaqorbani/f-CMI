@@ -156,7 +156,7 @@ def main():
     args = parser.parse_args()
     print(args)
 
-    if args.exp_name in ["fcmi-mnist-4vs9-CNN", "fcmi-mnist-4vs9-CNN-deterministic"]:
+    if args.exp_name in ["fcmi-mnist-4vs9-CNN", "fcmi-mnist-4vs9-CNN-deterministic", "fcmi-cats-and-dogs-CNN"]:
         args.n_seeds = 5
         args.n_S_seeds = 30
         args.ns = [75, 250, 1000, 4000]

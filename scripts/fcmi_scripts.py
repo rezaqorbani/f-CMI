@@ -13,6 +13,35 @@ local_functions = {}  # storage for registering the functions below
 # exp_name: fcmi-mnist-4vs9-CNN
 #######################################################################################
 
+@register_fn(local_functions, 'fcmi-cats-and-dogs-CNN')
+def foo(deterministic=False, **kwargs):
+    config_file = 'configs/binary-mnist-4layer-CNN.json'
+    batch_size = 128
+    n_epochs = 200
+    save_iter = 20
+    exp_name = "fcmi-cats-and-dogs-CNN"
+    if deterministic:
+        exp_name = exp_name + '-deterministic'
+    dataset = 'cats-and-dogs'
+    #which_labels = ' '
+
+    command_prefix = f"python -um scripts.fcmi_train_classifier -c {config_file} -d cpu -b {batch_size} " \
+                     f"-e {n_epochs} -s {save_iter} -v 10000 --exp_name {exp_name} -D {dataset} " #\
+                    # f"--which_labels {which_labels} "
+
+    if deterministic:
+        command_prefix += "--deterministic "
+
+    n_seeds = 5
+    n_S_seeds = 30
+    ns = [75, 250, 1000, 4000]
+
+    for n in ns:
+        for seed in range(n_seeds):
+            for S_seed in range(n_S_seeds):
+                command = command_prefix + f"--n {n} --seed {seed} --S_seed {S_seed};"
+                print(command)
+
 @register_fn(local_functions, 'fcmi-mnist-4vs9-CNN')
 def foo(deterministic=False, **kwargs):
     config_file = 'configs/binary-mnist-4layer-CNN.json'
