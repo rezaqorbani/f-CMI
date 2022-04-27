@@ -17,16 +17,16 @@ local_functions = {}  # storage for registering the functions below
 def foo(deterministic=False, **kwargs):
     config_file = 'configs/binary-mnist-4layer-CNN.json'
     batch_size = 128
-    n_epochs = 200
-    save_iter = 20
+    n_epochs = 20
+    save_iter = 2
     exp_name = "fcmi-cats-and-dogs-CNN"
     if deterministic:
         exp_name = exp_name + '-deterministic'
     dataset = 'cats-and-dogs'
     #which_labels = ' '
 
-    command_prefix = f"python -um scripts.fcmi_train_classifier -c {config_file} -d cpu -b {batch_size} " \
-                     f"-e {n_epochs} -s {save_iter} -v 10000 --exp_name {exp_name} -D {dataset} " #\
+    command_prefix = f"python -um scripts.fcmi_train_classifier -c {config_file} -d cuda -b {batch_size} " \
+                     f"-e {n_epochs} -s {save_iter} -v 10000 --exp_name {exp_name} -D {dataset} --optimizer adadelta " #\
                     # f"--which_labels {which_labels} "
 
     if deterministic:
@@ -34,7 +34,7 @@ def foo(deterministic=False, **kwargs):
 
     n_seeds = 5
     n_S_seeds = 30
-    ns = [75, 250, 1000, 4000]
+    ns = [75, 150, 300, 600]
 
     for n in ns:
         for seed in range(n_seeds):

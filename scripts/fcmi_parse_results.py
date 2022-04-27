@@ -156,12 +156,19 @@ def main():
     args = parser.parse_args()
     print(args)
 
-    if args.exp_name in ["fcmi-mnist-4vs9-CNN", "fcmi-mnist-4vs9-CNN-deterministic", "fcmi-cats-and-dogs-CNN"]:
+    if args.exp_name in ["fcmi-mnist-4vs9-CNN", "fcmi-mnist-4vs9-CNN-deterministic"]:
         args.n_seeds = 5
         args.n_S_seeds = 30
         args.ns = [75, 250, 1000, 4000]
         args.epochs = np.arange(1, 11) * 20
         args.num_classes = 2
+    elif args.exp_name == "fcmi-cats-and-dogs-CNN-deterministic":
+        args.n_seeds = 5
+        args.n_S_seeds = 30
+        args.ns = [75, 150, 300, 600]
+        args.epochs = np.arange(1, 11) * 2
+        args.num_classes = 2
+ 
     elif args.exp_name == 'fcmi-mnist-4vs9-wide-CNN-deterministic':
         args.n_seeds = 5
         args.n_S_seeds = 30
