@@ -107,4 +107,3 @@ venv.bak/
 /data
 /results
 train_commands.sh
-.gitmodules
