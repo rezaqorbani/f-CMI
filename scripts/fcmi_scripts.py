@@ -34,7 +34,7 @@ def foo(deterministic=False, **kwargs):
 
     n_seeds = 5
     n_S_seeds = 30
-    ns = [75, 150, 300, 600]
+    ns = [75, 250, 1000, 4000]
 
     for n in ns:
         for seed in range(n_seeds):
