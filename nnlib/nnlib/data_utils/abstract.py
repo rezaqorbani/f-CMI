@@ -62,7 +62,7 @@ class StandardVisionDataset(ABC):
                        seed: int = 42, download: bool = True, **kwargs):
         """ Builds train, validation, and test datasets. """
         if data_dir is None:
-            data_dir = os.path.join('C:\\Users\\rzaqo\\source\\repos\\f-CMI\\data', self.dataset_name)
+            data_dir = os.path.join(os.environ['DATA_DIR'], self.dataset_name)
 
         train_data = self.raw_dataset(data_dir, download=download, split='train', transform=self.train_transforms)
         val_data = self.raw_dataset(data_dir, download=download, split='val', transform=self.train_transforms)
