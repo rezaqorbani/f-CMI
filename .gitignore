@@ -104,6 +104,5 @@ venv.bak/
 .mypy_cache/
 
 #folders
-/data
 /results
 train_commands.sh
