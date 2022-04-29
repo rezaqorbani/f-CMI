@@ -72,18 +72,7 @@ def get_fcmi_results_for_fixed_z(n, epoch, seed, args):
                                                                  num_examples=n, num_classes=args.num_classes,
                                                                  return_list_of_mis=True)
 
-    # some extra for understanding why the f-cmi bound is high in the beginning (fcmi-mnist-4vs9-CNN-LD-*)
-    if (args.exp_name in ['fcmi-mnist-4vs9-CNN-LD', 'fcmi-mnist-4vs9-CNN-LD-shuffle_train_only_after_first_epoch']
-            and epoch == 4 and seed == 0):
-        extra_data = {
-            'all_examples': all_examples,
-            'masks': masks,
-            'preds': preds,
-            'num_examples': n,
-            'num_classes': args.num_classes
-        }
-        with open(f'results/{args.exp_name}/extra_data.pkl', 'wb') as f:
-            pickle.dump(extra_data, f)
+  
 
     return {
         'exp_train_acc': np.mean(train_accs),
@@ -156,46 +145,13 @@ def main():
     args = parser.parse_args()
     print(args)
 
-    if args.exp_name in ["fcmi-mnist-4vs9-CNN", "fcmi-mnist-4vs9-CNN-deterministic"]:
-        args.n_seeds = 5
-        args.n_S_seeds = 30
-        args.ns = [75, 250, 1000, 4000]
-        args.epochs = np.arange(1, 11) * 20
-        args.num_classes = 2
-    elif args.exp_name == "fcmi-cats-and-dogs-CNN-deterministic":
+    if args.exp_name == "fcmi-cats-and-dogs-CNN-deterministic":
         args.n_seeds = 5
         args.n_S_seeds = 30
         args.ns = [75, 150, 300, 600]
         args.epochs = np.arange(1, 11) * 2
         args.num_classes = 2
  
-    elif args.exp_name == 'fcmi-mnist-4vs9-wide-CNN-deterministic':
-        args.n_seeds = 5
-        args.n_S_seeds = 30
-        args.ns = [75, 250, 1000, 4000]
-        args.epochs = [200]
-        args.num_classes = 2
-    elif args.exp_name in ['fcmi-mnist-4vs9-CNN-LD',
-                           'fcmi-mnist-4vs9-CNN-LD-shuffle_train_only_after_first_epoch']:
-        args.n_seeds = 5
-        args.n_S_seeds = 30
-        args.ns = [4000]
-        args.epochs = np.arange(1, 11) * 4
-        args.num_classes = 2
-        args.batch_size = 100
-    elif args.exp_name == 'cifar10-pretrained-resnet50':
-        args.n_seeds = 1
-        args.n_S_seeds = 40
-        args.ns = [1000, 5000, 20000]
-        args.epochs = [40]
-        args.num_classes = 10
-    elif args.exp_name == 'cifar10-pretrained-resnet50-LD':
-        args.n_seeds = 1
-        args.n_S_seeds = 40
-        args.ns = [20000]
-        args.epochs = np.arange(1, 9) * 2
-        args.num_classes = 10
-        args.batch_size = 64
     else:
         raise ValueError(f"Unexpected exp_name: {args.exp_name}")
 
@@ -207,17 +163,6 @@ def main():
     results_file_path = os.path.join(args.results_dir, args.exp_name, 'results.pkl')
     with open(results_file_path, 'wb') as f:
         pickle.dump(results, f)
-
-    # parse the quantities needed for the Negrea et al. SGLD bound
-    if args.exp_name in ['fcmi-mnist-4vs9-CNN-LD', 'cifar10-pretrained-resnet50-LD',
-                         'fcmi-mnist-4vs9-CNN-LD-shuffle_train_only_after_first_epoch']:
-        sgld_results = NestedDict()  # indexing with n, epoch
-        for n in tqdm(args.ns):
-            for epoch in tqdm(args.epochs, leave=False):
-                sgld_results[n][epoch] = get_sgld_results_for_fixed_model(n=n, epoch=epoch, args=args)
-        results_file_path = os.path.join(args.results_dir, args.exp_name, 'sgld_results.pkl')
-        with open(results_file_path, 'wb') as f:
-            pickle.dump(sgld_results, f)
 
 
 if __name__ == '__main__':
